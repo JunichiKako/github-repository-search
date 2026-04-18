@@ -25,3 +25,18 @@ test("検索結果のページネーションが動作する", async ({ page }) 
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByText(/件ヒット/)).toBeVisible();
 });
+
+test("検索結果から詳細ページに遷移し、検索結果に戻れる", async ({ page }) => {
+  await page.goto("/?q=react");
+  await expect(page.getByText(/件ヒット/)).toBeVisible();
+
+  await page.locator("a[href^='/repositories/']").first().click();
+  await expect(page.getByText("Stars")).toBeVisible();
+  await expect(page.getByText("Watchers")).toBeVisible();
+  await expect(page.getByText("Forks")).toBeVisible();
+  await expect(page.getByText("Issues")).toBeVisible();
+
+  await page.getByText("← 検索結果に戻る").click();
+  await expect(page).toHaveURL(/\?q=react/);
+  await expect(page.getByText(/件ヒット/)).toBeVisible();
+});
