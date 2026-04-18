@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: HomePageProps) {
       </p>
 
       <div className="mt-6">
-        <SearchForm defaultValue={query} />
+        <SearchForm query={query} />
       </div>
 
       {query && (
