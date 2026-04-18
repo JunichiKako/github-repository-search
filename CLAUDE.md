@@ -40,6 +40,7 @@ GitHub APIへのアクセスは `data/` 配下に集約。
 コンポーネント��API呼び出しをベタ書きせず、通信の層を分離する。
 複数のServer Componentから共通で呼び出せる。
 `app/api/` はRoute Handlerの役割を持つため、データアクセスの配置先としては使わない。
+data層には `import "server-only"` を付与し、Client Componentからの誤ったimportをビルド時に検出する。
 検索状態はURL（`?q=keyword&page=2`）で管理。
 
 ### Server Component / Client Component の境界
