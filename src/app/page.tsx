@@ -4,11 +4,12 @@ import { RepositoryListSkeleton } from "@/components/repository-list-skeleton";
 import { SearchForm } from "@/components/search-form";
 
 type HomePageProps = {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 };
 
 export default async function Home({ searchParams }: HomePageProps) {
-  const { q: query } = await searchParams;
+  const { q: query, page } = await searchParams;
+  const currentPage = Number(page) || 1;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
@@ -22,8 +23,11 @@ export default async function Home({ searchParams }: HomePageProps) {
 
       {query && (
         <div className="mt-6">
-          <Suspense key={query} fallback={<RepositoryListSkeleton />}>
-            <RepositoryList query={query} />
+          <Suspense
+            key={`${query}-${currentPage}`}
+            fallback={<RepositoryListSkeleton />}
+          >
+            <RepositoryList query={query} page={currentPage} />
           </Suspense>
         </div>
       )}
