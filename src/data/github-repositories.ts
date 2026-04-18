@@ -1,0 +1,41 @@
+import type { GitHubSearchRepositoriesResponse } from "@/types/github";
+
+export type SearchRepositoriesParams = {
+  q: string;
+  page?: number;
+  perPage?: number;
+};
+
+export async function searchRepositories({
+  q,
+  page = 1,
+  perPage = 30,
+}: SearchRepositoriesParams): Promise<GitHubSearchRepositoriesResponse> {
+  const params = new URLSearchParams({
+    q,
+    page: String(page),
+    per_page: String(perPage),
+  });
+
+  const response = await fetch(
+    `https://api.github.com/search/repositories?${params}`,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2026-03-10",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error("GitHub APIのレート制限に達しました");
+    }
+    if (response.status === 422) {
+      throw new Error("検索クエリが不正です");
+    }
+    throw new Error(`GitHub APIエラー: ${response.statusText}`);
+  }
+
+  return response.json();
+}
