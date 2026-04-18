@@ -1,12 +1,20 @@
 import { RepositoryCard } from "@/components/repository-card";
+import { SearchPagination } from "@/components/search-pagination";
 import { searchRepositories } from "@/data/github-repositories";
+
+const PER_PAGE = 30;
 
 type RepositoryListProps = {
   query: string;
+  page: number;
 };
 
-export async function RepositoryList({ query }: RepositoryListProps) {
-  const result = await searchRepositories({ q: query });
+export async function RepositoryList({ query, page }: RepositoryListProps) {
+  const result = await searchRepositories({
+    q: query,
+    page,
+    perPage: PER_PAGE,
+  });
 
   if (result.items.length === 0) {
     return (
@@ -26,6 +34,12 @@ export async function RepositoryList({ query }: RepositoryListProps) {
           <RepositoryCard key={repository.id} repository={repository} />
         ))}
       </div>
+      <SearchPagination
+        currentPage={page}
+        totalCount={result.total_count}
+        perPage={PER_PAGE}
+        query={query}
+      />
     </div>
   );
 }
