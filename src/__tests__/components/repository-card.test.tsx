@@ -22,7 +22,9 @@ const baseRepository: GitHubRepository = {
 
 describe("RepositoryCard", () => {
   it("リポジトリ名と説明、言語、スター数を表示する", () => {
-    render(<RepositoryCard repository={baseRepository} />);
+    render(
+      <RepositoryCard repository={baseRepository} query="react" page={1} />,
+    );
 
     expect(screen.getByText("facebook/react")).toBeDefined();
     expect(
@@ -33,9 +35,13 @@ describe("RepositoryCard", () => {
   });
 
   it("詳細ページへのリンクを持つ", () => {
-    render(<RepositoryCard repository={baseRepository} />);
+    render(
+      <RepositoryCard repository={baseRepository} query="react" page={1} />,
+    );
 
     const link = screen.getByRole("link");
-    expect(link.getAttribute("href")).toBe("/repositories/facebook/react");
+    expect(link.getAttribute("href")).toBe(
+      "/repositories/facebook/react?q=react&page=1",
+    );
   });
 });

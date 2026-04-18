@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
-import { searchRepositories } from "@/data/github-repositories";
+import { getRepository, searchRepositories } from "@/data/github-repositories";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -72,6 +72,53 @@ describe("searchRepositories", () => {
 
     await expect(searchRepositories({ q: "react" })).rejects.toThrow(
       /GitHub APIエラー/,
+    );
+  });
+});
+
+describe("getRepository", () => {
+  it("リポジトリ情報を取得できる", async () => {
+    const mockRepo = {
+      id: 1,
+      name: "react",
+      full_name: "facebook/react",
+      owner: {
+        login: "facebook",
+        avatar_url: "https://example.com/avatar.png",
+      },
+      description: "A JavaScript library",
+      language: "JavaScript",
+      stargazers_count: 230000,
+      watchers_count: 230000,
+      forks_count: 47000,
+      open_issues_count: 1000,
+      html_url: "https://github.com/facebook/react",
+    };
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockRepo,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await getRepository("facebook", "react");
+
+    expect(result).toEqual(mockRepo);
+    const calledUrl = fetchMock.mock.calls[0][0] as string;
+    expect(calledUrl).toContain("/repos/facebook/react");
+  });
+
+  it("404のとき「見つかりませんでした」エラーを投げる", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        statusText: "Not Found",
+      }),
+    );
+
+    await expect(getRepository("owner", "repo")).rejects.toThrow(
+      /見つかりませんでした/,
     );
   });
 });
