@@ -1,4 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("server-only", () => ({}));
+
 import { searchRepositories } from "@/data/github-repositories";
 
 afterEach(() => {

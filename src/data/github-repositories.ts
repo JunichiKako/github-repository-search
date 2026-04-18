@@ -1,3 +1,4 @@
+import "server-only";
 import type { GitHubSearchRepositoriesResponse } from "@/types/github";
 
 export type SearchRepositoriesParams = {
