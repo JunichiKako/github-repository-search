@@ -31,7 +31,12 @@ export async function RepositoryList({ query, page }: RepositoryListProps) {
       </p>
       <div className="mt-4 flex flex-col gap-3">
         {result.items.map((repository) => (
-          <RepositoryCard key={repository.id} repository={repository} />
+          <RepositoryCard
+            key={repository.id}
+            repository={repository}
+            query={query}
+            page={page}
+          />
         ))}
       </div>
       <SearchPagination

@@ -4,12 +4,19 @@ import type { GitHubRepository } from "@/types/github";
 
 type RepositoryCardProps = {
   repository: GitHubRepository;
+  query: string;
+  page: number;
 };
 
-export function RepositoryCard({ repository }: RepositoryCardProps) {
+export function RepositoryCard({
+  repository,
+  query,
+  page,
+}: RepositoryCardProps) {
+  const href = `/repositories/${repository.owner.login}/${repository.name}?q=${encodeURIComponent(query)}&page=${page}`;
   return (
     <Link
-      href={`/repositories/${repository.owner.login}/${repository.name}`}
+      href={href}
       className="block rounded-lg border border-border p-4 transition-colors hover:bg-muted"
     >
       <div className="flex items-start gap-3">
