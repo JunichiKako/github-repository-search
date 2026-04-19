@@ -18,20 +18,20 @@ test("検索を実行すると結果一覧が表示される", async ({ page }) 
   await page.getByRole("button", { name: "検索" }).click();
 
   await expect(page).toHaveURL(/\?q=react/);
-  await expect(page.getByText(/件ヒット/)).toBeVisible();
+  await expect(page.locator("a[href^='/repositories/']").first()).toBeVisible();
 });
 
 test("検索結果のページネーションが動作する", async ({ page }) => {
   await page.goto("/?q=react");
-  await expect(page.getByText(/件ヒット/)).toBeVisible();
+  await expect(page.locator("a[href^='/repositories/']").first()).toBeVisible();
   await page.getByText("次へ").click();
   await expect(page).toHaveURL(/page=2/);
-  await expect(page.getByText(/件ヒット/)).toBeVisible();
+  await expect(page.locator("a[href^='/repositories/']").first()).toBeVisible();
 });
 
 test("検索結果から詳細ページに遷移し、検索結果に戻れる", async ({ page }) => {
   await page.goto("/?q=react");
-  await expect(page.getByText(/件ヒット/)).toBeVisible();
+  await expect(page.locator("a[href^='/repositories/']").first()).toBeVisible();
 
   await page.locator("a[href^='/repositories/']").first().click();
   await expect(page.getByText("Stars")).toBeVisible();
@@ -41,5 +41,5 @@ test("検索結果から詳細ページに遷移し、検索結果に戻れる",
 
   await page.getByText("← 検索結果に戻る").click();
   await expect(page).toHaveURL(/\?q=react/);
-  await expect(page.getByText(/件ヒット/)).toBeVisible();
+  await expect(page.locator("a[href^='/repositories/']").first()).toBeVisible();
 });
