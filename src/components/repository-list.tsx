@@ -26,10 +26,7 @@ export async function RepositoryList({ query, page }: RepositoryListProps) {
 
   return (
     <div>
-      <p className="text-sm text-muted-foreground">
-        {result.total_count.toLocaleString()}件ヒット
-      </p>
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         {result.items.map((repository) => (
           <RepositoryCard
             key={repository.id}

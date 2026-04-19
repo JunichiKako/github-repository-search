@@ -21,7 +21,12 @@ export function SearchPagination({
   perPage,
   query,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalCount / perPage);
+  // GitHub Search APIは最大1000件までしか取得できないため上限を設定
+  const MAX_RESULTS = 1000;
+  const totalPages = Math.min(
+    Math.ceil(totalCount / perPage),
+    Math.ceil(MAX_RESULTS / perPage),
+  );
 
   if (totalPages <= 1) return null;
 
