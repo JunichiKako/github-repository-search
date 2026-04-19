@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-test("トップページが表示され、検索フォームが存在する", async ({ page }) => {
+test("トップページに検索フォームと人気リポジトリが表示される", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/GitHub Repository Search/);
   await expect(
     page.getByRole("searchbox", { name: "検索キーワード" }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "検索" })).toBeVisible();
+  await expect(page.getByText("人気のリポジトリ")).toBeVisible();
 });
 
 test("検索を実行すると結果一覧が表示される", async ({ page }) => {
