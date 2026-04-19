@@ -8,18 +8,24 @@ export type SearchRepositoriesParams = {
   q: string;
   page?: number;
   perPage?: number;
+  sort?: "stars" | "forks" | "help-wanted-issues" | "updated";
+  order?: "asc" | "desc";
 };
 
 export async function searchRepositories({
   q,
   page = 1,
   perPage = 30,
+  sort,
+  order,
 }: SearchRepositoriesParams): Promise<GitHubSearchRepositoriesResponse> {
   const params = new URLSearchParams({
     q,
     page: String(page),
     per_page: String(perPage),
   });
+  if (sort) params.set("sort", sort);
+  if (order) params.set("order", order);
 
   const response = await fetch(
     `https://api.github.com/search/repositories?${params}`,

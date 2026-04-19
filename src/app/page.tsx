@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PopularRepositoryList } from "@/components/popular-repository-list";
 import { RepositoryList } from "@/components/repository-list";
 import { RepositoryListSkeleton } from "@/components/repository-list-skeleton";
 import { SearchForm } from "@/components/search-form";
@@ -21,16 +22,18 @@ export default async function Home({ searchParams }: HomePageProps) {
         <SearchForm query={query} />
       </div>
 
-      {query && (
-        <div className="mt-6">
-          <Suspense
-            key={`${query}-${currentPage}`}
-            fallback={<RepositoryListSkeleton />}
-          >
+      <div className="mt-6">
+        <Suspense
+          key={query ? `${query}-${currentPage}` : "popular"}
+          fallback={<RepositoryListSkeleton />}
+        >
+          {query ? (
             <RepositoryList query={query} page={currentPage} />
-          </Suspense>
-        </div>
-      )}
+          ) : (
+            <PopularRepositoryList />
+          )}
+        </Suspense>
+      </div>
     </div>
   );
 }
